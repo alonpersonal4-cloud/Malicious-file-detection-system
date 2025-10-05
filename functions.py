@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import magic
 def check_file_size(file_path):
     path = Path(file_path)
     if path.exists():
@@ -9,6 +9,7 @@ def check_file_size(file_path):
         return rounded_size
     else:
         return None
+def identify_file_type(file_path):
+    extension = magic.Magic(mime=True).from_file(file_path)  
+    return extension
     
-    
-
