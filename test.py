@@ -8,6 +8,6 @@ print(test_file_type)
 #testing the suspicious_strings function
 test_suspicious_strings1 = functions.suspicious_strings("C:/Users/user/Downloads/test.txt")
 test_suspicious_strings2 = functions.suspicious_strings("C:/Users/user/Downloads/emptytest.txt")
-test_suspicious_strings3 = functions.suspicious_strings("C:/Users/user/Downloads/binarytest.txt")
+test_suspicious_strings3 = functions.suspicious_strings("C:/Users/user/Documents/Code/VsCode/Setups/binarytest.exe")
 print(test_suspicious_strings1 , test_suspicious_strings2 , test_suspicious_strings3)
         
