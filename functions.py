@@ -12,7 +12,7 @@ def check_file_size(file_path):
 def identify_file_type(file_path):
     path = Path(file_path)
     if path.exists():
-        mime_type = magic.Magic(mime=True).from_file(path)  
+        mime_type = magic.from_file(str(path), mime=True)  
         return mime_type
     else:
         return None
