@@ -21,16 +21,29 @@ def suspicious_strings(file_path):
     string_list = ["system","shell","download","socket","encrypt","decrypt","payload"]
     path = Path(file_path)
     if path.exists():
-        with open(file_path, 'r') as f:
-            for line in f:
-                strings = line.strip().split()
-                for string in strings:
-                    lower_string = string.lower()
-                    if (lower_string in string_list):
-                        if lower_string in string_count:
-                            string_count[lower_string] += 1
-                        else:
-                            string_count[lower_string] = 1
-                return string_count
-            else :
-                return None                 
+        try:
+            with open(file_path, 'r') as f:
+                for line in f:
+                    strings = line.strip().split()
+                    for string in strings:
+                        lower_string = string.lower()
+                        if (lower_string in string_list):
+                            if lower_string in string_count:
+                                string_count[lower_string] += 1
+                            else:
+                                string_count[lower_string] = 1
+        except:
+            with open(file_path, 'rb') as f:  
+                    content = f.read()
+                    text = content.decode('utf-8', errors='ignore')
+                    strings = text.strip().split()
+                    for string in strings:
+                        lower_string = string.lower()
+                        if (lower_string in string_list):
+                            if lower_string in string_count:
+                                string_count[lower_string] += 1
+                            else:
+                                string_count[lower_string] = 1
+        return string_count
+    else:
+        return None
