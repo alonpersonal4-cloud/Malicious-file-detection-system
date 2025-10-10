@@ -37,13 +37,10 @@ def suspicious_strings(file_path):
                     content = f.read()
                     text = content.decode('utf-8', errors='ignore')
                     strings = text.strip().split()
-                    for string in strings:
-                        lower_string = string.lower()
-                        if (lower_string in string_list):
-                            if lower_string in string_count:
-                                string_count[lower_string] += 1
-                            else:
-                                string_count[lower_string] = 1
+                    for suspicious_word in string_list:
+                        count = text.lower().count(suspicious_word)
+                        if count > 0:
+                            string_count[suspicious_word] = count
         return string_count
     else:
         return None
