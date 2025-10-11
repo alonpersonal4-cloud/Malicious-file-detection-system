@@ -1,5 +1,6 @@
 from pathlib import Path
 import magic
+import hashlib
 def check_file_size(file_path):
     path = Path(file_path)
     if path.exists():
@@ -42,5 +43,16 @@ def suspicious_strings(file_path):
                         if count > 0:
                             string_count[suspicious_word] = count
         return string_count
+    else:
+        return None
+def calculate_hash(file_path):
+    path = Path(file_path)
+    if path.exists():
+        with open(file_path, 'rb') as f:  
+            content = f.read()
+        hasher = hashlib.sha256()
+        hasher.update(content)
+        hashed_content = hasher.hexdigest()
+        return hashed_content
     else:
         return None

@@ -10,5 +10,7 @@ test_suspicious_strings1 = functions.suspicious_strings("C:/Users/user/Downloads
 test_suspicious_strings2 = functions.suspicious_strings("C:/Users/user/Downloads/emptytest.txt")
 test_suspicious_strings3 = functions.suspicious_strings("C:/Users/user/Downloads/GitHubDesktopSetup-x64.exe")
 print(test_suspicious_strings1 , test_suspicious_strings2 , test_suspicious_strings3)
-
+#testing the calculate_hash function
+test_calculate_hash= functions.calculate_hash("C:/Users/user/Downloads/test.txt")
+print(test_calculate_hash)
         
