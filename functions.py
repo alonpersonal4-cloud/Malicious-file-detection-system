@@ -74,5 +74,4 @@ def calculate_entropy(file_path):
                   entropy -= (probability * math.log2(probability))  
     else:
         return None         
-    return entropy    
-            
+    return entropy
