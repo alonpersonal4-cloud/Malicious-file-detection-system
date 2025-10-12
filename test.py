@@ -13,4 +13,9 @@ print(test_suspicious_strings1 , test_suspicious_strings2 , test_suspicious_stri
 #testing the calculate_hash function
 test_calculate_hash= functions.calculate_hash("C:/Users/user/Downloads/test.txt")
 print(test_calculate_hash)
+#testing the calculate_entropy function
+test_calculate_entropy1 = functions.calculate_entropy("C:/Users/user/Downloads/test.txt")
+test_calculate_entropy2 = functions.calculate_entropy("C:/Users/user/Downloads/GitHubDesktopSetup-x64.exe")
+print(test_calculate_entropy1 , test_calculate_entropy2)
+
         
