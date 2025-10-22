@@ -1,4 +1,5 @@
 import functions
+from scoring import calculate_malware_score 
 #testing the check_file_size function
 test_file_size = functions.check_file_size("C:/Users/user/Downloads/GitHubDesktopSetup-x64.exe")
 print(test_file_size)
@@ -17,5 +18,9 @@ print(test_calculate_hash)
 test_calculate_entropy1 = functions.calculate_entropy("C:/Users/user/Downloads/test.txt")
 test_calculate_entropy2 = functions.calculate_entropy("C:/Users/user/Downloads/GitHubDesktopSetup-x64.exe")
 print(test_calculate_entropy1 , test_calculate_entropy2)
-
+#testing the scoring system
+score_one = calculate_malware_score("C:/Users/user/Downloads/test.txt")
+score_two = calculate_malware_score("C:/Users/user/Downloads/GitHubDesktopSetup-x64.exe")
+print(score_one)
+print(score_two)
         
