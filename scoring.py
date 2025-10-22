@@ -74,15 +74,15 @@ def suspicious_strings_score(file_path):
         explanation.append("Could not find sispicious words in the file")
     else:
         for word in dangerous_words_list:
-            if dangerous_words_list[word] in file_strings:
+            if word in file_strings:
                 dangerous_words+= file_strings[word]
         if dangerous_words > 0:
             explanation.append("Found the words '{}' in the file".format(dangerous_words_list))
         for word2 in threatening_words_list:
-            if threatening_words_list[word2] in file_strings:
+            if word2 in file_strings:
                 threatening_words+= file_strings[word2]
         if threatening_words > 0:
-            explanation.append("Found a the words '{}' in the file".format(dangerous_words_list))
+            explanation.append("Found a the words '{}' in the file".format(threatening_words_list))
     score = (dangerous_words * 0.5 ) + (threatening_words * 0.3)
     if score < 0.5:
         return 0, explanation
@@ -92,7 +92,12 @@ def suspicious_strings_score(file_path):
         return 1.5, explanation
     else :
         return 2.5,explanation
-                
+def hash_score(file_path):
+    score = 0
+    explanation = ["The hash score function is under construction."]
+    return score , explanation
+    
+
         
     
     
