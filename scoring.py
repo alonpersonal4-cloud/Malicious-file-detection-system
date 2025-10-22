@@ -96,7 +96,33 @@ def hash_score(file_path):
     score = 0
     explanation = ["The hash score function is under construction."]
     return score , explanation
-    
+def calculate_malware_score(file_path):
+    path = Path(file_path)
+    if not path.exists():
+        return 0 , "file not found"
+    score = 0
+    explanation = []
+    size = size_score(file_path)#
+    score = size[0] + score
+    explanation.extend(size[1])
+    file_type = type_score(file_path)#
+    score = file_type[0] + score
+    explanation.extend(file_type[1])
+    entropy = entropy_score(file_path)#
+    score = entropy[0] + score
+    explanation.extend(entropy[1])
+    sus_words = suspicious_strings_score(file_path)#
+    score = sus_words[0] + score
+    explanation.extend(sus_words[1])
+    hash_file = hash_score(file_path)#
+    score = hash_file[0] + score
+    explanation.extend(hash_file[1])
+    if score >7:
+        return "Risk : High", explanation
+    elif score > 4:
+        return "Risk : Medium", explanation
+    else:
+        return "Risk : Low", explanation
 
         
     
