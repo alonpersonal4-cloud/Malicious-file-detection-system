@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<!-- built by AI -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malware Detection System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .upload-section {
+            background: #f8f9fa;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #764ba2;
+            background: #f0f0f5;
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-label {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .file-label:hover {
+            transform: scale(1.05);
+        }
+
+        .file-name {
+            margin-top: 20px;
+            color: #333;
+            font-weight: 500;
+            min-height: 24px;
+        }
+
+        .scan-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .scan-button:hover {
+            transform: scale(1.02);
+        }
+
+        .scan-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+
+        .risk-low {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .risk-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .risk-high {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .score-display {
+            font-size: 3em;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .explanations {
+            margin-top: 30px;
+        }
+
+        .explanation-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ Malware Detection System</h1>
+        <p class="subtitle">Upload a file to analyze for potential threats</p>
+
+        <form action="/scan" method="POST" enctype="multipart/form-data">
+            <div class="upload-section">
+                <div class="upload-icon">📁</div>
+                <label for="file-input" class="file-label">Choose File</label>
+                <input type="file" id="file-input" name="file" accept=".exe,.dll,.py,.js,.bat,.ps1,.txt" required>
+                <div class="file-name" id="file-name">No file selected</div>
+            </div>
+
+            <button type="submit" class="scan-button" id="scan-button" disabled>
+                🔍 Scan File
+            </button>
+        </form>
+
+        {% if result %}
+        <div class="results">
+            <div style="text-align: center;">
+                <span class="risk-badge risk-{{ result.risk_level|lower }}">
+                    {{ result.risk_level }} Risk
+                </span>
+            </div>
+
+            <div class="score-display">
+                Score: {{ result.score }}/10
+            </div>
+
+            <div class="explanations">
+                <h3 style="margin-bottom: 15px; color: #333;">Analysis Details:</h3>
+                {% for explanation in result.explanations %}
+                <div class="explanation-item">
+                    {{ explanation }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            Developed for Cybersecurity Analysis | Machine Learning Powered
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const fileName = document.getElementById('file-name');
+        const scanButton = document.getElementById('scan-button');
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                fileName.textContent = '📄 ' + e.target.files[0].name;
+                scanButton.disabled = false;
+            } else {
+                fileName.textContent = 'No file selected';
+                scanButton.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
