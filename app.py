@@ -1,14 +1,24 @@
+import tempfile
 from flask import Flask, request, render_template
 from scoring import calculate_malware_score
+import os
 
 app = Flask(__name__)
-@app.route('/')
+@app.route("/")
 def home ():  
-    return  render_template('index.html')
-@app.route('/scan', methods=['POST'])
+    return  render_template("index.html")
+@app.route("/scan", methods=["POST"])
 def scan():
-    
-    
+    if "file" not in request.files:
+        return "No found a file"
+    else:
+        with tempfile.NamedTemporaryFile(delete=False) as temp:
+            file = request.files["file"]
+            file.save(temp.name)
+            file_path = temp.name
+        result = calculate_malware_score(file_path)
+        os.remove(file_path)
+        return render_template('index.html', result=result)
     
 if __name__ == "__main__":
     app.run(debug=True)
