@@ -82,7 +82,7 @@ def suspicious_strings_score(file_path):
             if word2 in file_strings:
                 threatening_words+= file_strings[word2]
         if threatening_words > 0:
-            explanation.append("Found a the words '{}' in the file".format(threatening_words_list))
+            explanation.append("Found the words '{}' in the file".format(threatening_words_list))
     score = (dangerous_words * 0.5 ) + (threatening_words * 0.3)
     if score < 0.5:
         return 0, explanation
@@ -99,7 +99,7 @@ def hash_score(file_path):
 def calculate_malware_score(file_path):
     path = Path(file_path)
     if not path.exists():
-        return 0 , "file not found"
+        return "Risk : None", ["file not found"], 0
     score = 0
     explanation = []
     size = size_score(file_path)#
@@ -118,11 +118,11 @@ def calculate_malware_score(file_path):
     score = hash_file[0] + score
     explanation.extend(hash_file[1])
     if score >7:
-        return "Risk : High", explanation
+        return "Risk : High", explanation ,score
     elif score > 4:
-        return "Risk : Medium", explanation
+        return "Risk : Medium", explanation,score
     else:
-        return "Risk : Low", explanation
+        return "Risk : Low", explanation,score
 
         
     

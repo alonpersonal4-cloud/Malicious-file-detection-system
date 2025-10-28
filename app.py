@@ -17,8 +17,13 @@ def scan():
             file.save(temp.name)
             file_path = temp.name
         result = calculate_malware_score(file_path)
+        Dictionary ={
+            "risk_level": result[0],
+            "explanations": result[1],
+            "score": result[2]
+        }
         os.remove(file_path)
-        return render_template('index.html', result=result)
+        return render_template('index.html', result=Dictionary)
     
 if __name__ == "__main__":
     app.run(debug=True)
