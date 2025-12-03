@@ -37,3 +37,22 @@ if 4 == round(ratio1) and 4 == round(ratio2):
 else:
     print("not good ratio")
 
+model = RandomForestClassifier(
+    n_estimators=150, 
+    max_depth=20, 
+    random_state=40, 
+    n_jobs=-1
+)
+model.fit(X_train, Y_train)
+print("The model has been trained !")
+
+Y_pred = model.predict(X_test)
+print(Y_pred)
+accuracy = accuracy_score(Y_test, Y_pred)
+print(accuracy)
+report = classification_report(Y_test,Y_pred)
+print(report)
+
+with open("malware_model.pkl",'wb') as f:
+    pickle.dump(model, f)
+print("Model saved successfully!")
