@@ -36,6 +36,7 @@ def suspicious_strings(file_path):
                                 string_count[lower_string] += 1
                             else:
                                 string_count[lower_string] = 1
+                    f.close
         except:
             with open(path, 'rb') as f:  
                     content = f.read()
@@ -45,6 +46,7 @@ def suspicious_strings(file_path):
                         count = text.lower().count(suspicious_word)
                         if count > 0:
                             string_count[suspicious_word] = count
+                    f.close
         return string_count
     else:
         return None
@@ -56,6 +58,7 @@ def calculate_hash(file_path):
         hasher = hashlib.sha256()
         hasher.update(content)
         hashed_content = hasher.hexdigest()
+        f.close
         return hashed_content
     else:
         return None
@@ -65,6 +68,7 @@ def calculate_entropy(file_path):
     if path.exists():
         with open(path , 'rb') as f:
             content = f.read()
+            f.close
             if len(content) == 0:
                 return None
             byte_counts = Counter(content)
@@ -82,6 +86,7 @@ def get_size_of_code(file_path):
     try:
         pe = pefile.PE(path)
         size_of_code = pe.OPTIONAL_HEADER.SizeOfCode
+        pe.close()
         return size_of_code
     except:
         return 0
@@ -90,6 +95,7 @@ def get_size_of_image(file_path):
     try:
         pe = pefile.PE(path)
         size_of_image = pe.OPTIONAL_HEADER.SizeOfImage
+        pe.close()
         return size_of_image
     except:
         return 0
@@ -98,6 +104,7 @@ def get_number_of_sections(file_path):
     try:
         pe = pefile.PE(path)
         sections = pe.FILE_HEADER.NumberOfSections
+        pe.close()
         return sections
     except:
         return 0
@@ -110,7 +117,10 @@ def check_packer(file_path):
         for section in sections:
             section_name = section.Name.decode('utf-8', errors='ignore').lower().strip()
             if (section_name in string_list):
+                pe.close()
                 return 1
+        pe.close()
         return 0
     except:
+        pe.close()
         return 0
