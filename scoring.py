@@ -110,9 +110,9 @@ def model_score(file_path):
           functions.get_number_of_sections(path)]]
     prediction = model.predict(X)
     if prediction[0] == 1:
-        return 3
+        return 3 , ["The ML model predicts the file is a Malware !"]
     else :
-        return 0  
+        return 0 , ["The ML model predicts the file  is Safe !"]
 def calculate_malware_score(file_path):
     path = Path(file_path)
     if not path.exists():
@@ -134,6 +134,9 @@ def calculate_malware_score(file_path):
     hash_file = hash_score(file_path)#
     score = hash_file[0] + score
     explanation.extend(hash_file[1])
+    ML_prediction = model_score(file_path)#
+    score = ML_prediction[0] + score
+    explanation.extend(ML_prediction[1])
     if score >7:
         return "Risk : High", explanation ,score
     elif score > 4:
