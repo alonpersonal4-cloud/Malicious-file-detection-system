@@ -1,6 +1,6 @@
 from pathlib import Path
 import functions
-
+import pickle
 def size_score(file_path):
     score = 0
     explanation=[]
@@ -96,6 +96,23 @@ def hash_score(file_path):
     score = 0
     explanation = ["The hash score function is under construction."]
     return score , explanation
+model = pickle.load(open("malware_model.pkl", 'rb'))
+def model_score(file_path):
+    path = Path(file_path)
+    # entropy , size , sus_words , packer , sizeofcode , sizeofimage , numofsections
+    sum_sus_strings = sum(functions.suspicious_strings(path).values())
+    X = [[functions.calculate_entropy(path),
+          functions.check_file_size(path),
+          sum_sus_strings,
+          functions.check_packer(path),
+          functions.get_size_of_code(path),
+          functions.get_size_of_image(path),
+          functions.get_number_of_sections(path)]]
+    prediction = model.predict(X)
+    if prediction[0] == 1:
+        return 3
+    else :
+        return 0  
 def calculate_malware_score(file_path):
     path = Path(file_path)
     if not path.exists():

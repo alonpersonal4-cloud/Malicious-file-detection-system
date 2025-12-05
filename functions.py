@@ -3,6 +3,7 @@ import magic
 import hashlib
 from collections import Counter
 import math
+import pefile
 def check_file_size(file_path):
     path = Path(file_path)
     if path.exists():
@@ -75,3 +76,41 @@ def calculate_entropy(file_path):
     else:
         return None         
     return entropy
+# function for the ML model
+def get_size_of_code(file_path):
+    path =Path(file_path)
+    try:
+        pe = pefile.PE(path)
+        size_of_code = pe.OPTIONAL_HEADER.SizeOfCode
+        return size_of_code
+    except:
+        return 0
+def get_size_of_image(file_path):
+    path =Path(file_path)
+    try:
+        pe = pefile.PE(path)
+        size_of_image = pe.OPTIONAL_HEADER.SizeOfImage
+        return size_of_image
+    except:
+        return 0
+def get_number_of_sections(file_path):
+    path =Path(file_path)
+    try:
+        pe = pefile.PE(path)
+        sections = pe.FILE_HEADER.NumberOfSections
+        return sections
+    except:
+        return 0
+def check_packer(file_path):
+    try:
+        path =Path(file_path)
+        string_list = ["upx", "aspack", "pecompact", "packed"]
+        pe = pefile.PE(path)
+        sections = pe.sections
+        for section in sections:
+            section_name = section.Name.decode('utf-8', errors='ignore').lower().strip()
+            if (section_name in string_list):
+                return 1
+        return 0
+    except:
+        return 0
