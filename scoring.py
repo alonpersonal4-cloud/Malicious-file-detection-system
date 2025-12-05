@@ -5,18 +5,15 @@ def size_score(file_path):
     score = 0
     explanation=[]
     size = functions.check_file_size(file_path)
-    if size <10:
-        score += 0
-        explanation.append("Small file (<10MB)")
-    elif  size<50:
-        score+=0.5
-        explanation.append("Medium Size (10-50MB)")
+    if  size<50:
+        score+=0.25
+        explanation.append("Small Size (10-50MB)")
     elif size<100:
-        score+=1
-        explanation.append("Large File (50-100MB)")
+        score+=0.5
+        explanation.append("Medium File (50-100MB)")
     else:
-        score+=1.5
-        explanation.append("Very Large File (100MB+)")
+        score+=0.75
+        explanation.append("Large File (100MB+)")
     return score , explanation
 def type_score(file_path):
     score =0
@@ -27,7 +24,7 @@ def type_score(file_path):
         explanation.append("Could not identify file type")
         return score, explanation
     if "dosexec" in file_type  or "dll" in file_type :
-        score += 2
+        score += 1.5
         explanation.append("Executable File (DANGER)")
     elif  "script" in file_type :
         score+=0.5
@@ -57,7 +54,7 @@ def entropy_score(file_path):
         score+=2
         explanation.append("High entropy level (ASCII character)")
     else:
-        score+=3
+        score+=2.25
         explanation.append("Very high level of entropy (fully random)")
     return score , explanation
 def suspicious_strings_score(file_path):
@@ -91,9 +88,9 @@ def suspicious_strings_score(file_path):
     elif score  < 2.5:
         return 1.5, explanation
     else :
-        return 2.5,explanation
+        return 2,explanation
 def hash_score(file_path):
-    score = 0
+    score = 0 #0.5
     explanation = ["The hash score function is under construction."]
     return score , explanation
 model = pickle.load(open("malware_model.pkl", 'rb'))
