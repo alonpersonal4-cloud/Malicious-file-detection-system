@@ -4,6 +4,9 @@ import hashlib
 from collections import Counter
 import math
 import pefile
+import requests
+from dotenv import load_dotenv
+import os
 def check_file_size(file_path):
     path = Path(file_path)
     if path.exists():
@@ -86,28 +89,34 @@ def get_size_of_code(file_path):
     try:
         pe = pefile.PE(path)
         size_of_code = pe.OPTIONAL_HEADER.SizeOfCode
-        pe.close()
         return size_of_code
     except:
         return 0
+    finally:
+        if pe:
+            pe.close()
 def get_size_of_image(file_path):
     path =Path(file_path)
     try:
         pe = pefile.PE(path)
         size_of_image = pe.OPTIONAL_HEADER.SizeOfImage
-        pe.close()
         return size_of_image
     except:
         return 0
+    finally:
+        if pe:
+            pe.close()
 def get_number_of_sections(file_path):
     path =Path(file_path)
     try:
         pe = pefile.PE(path)
         sections = pe.FILE_HEADER.NumberOfSections
-        pe.close()
         return sections
     except:
         return 0
+    finally:
+        if pe:
+            pe.close()
 def check_packer(file_path):
     try:
         path =Path(file_path)
@@ -117,10 +126,26 @@ def check_packer(file_path):
         for section in sections:
             section_name = section.Name.decode('utf-8', errors='ignore').lower().strip()
             if (section_name in string_list):
-                pe.close()
                 return 1
-        pe.close()
         return 0
     except:
-        pe.close()
         return 0
+    finally:
+        if pe:
+            pe.close()
+load_dotenv()
+API_KEY = os.getenv('VT_API_KEY')
+def get_hash_info(file_path):
+    base_url = "https://www.virustotal.com/api/v3/files"
+    url = f"{base_url}/{calculate_hash(file_path)}"
+    headers = {
+        "accept": "application/json",
+        "x-apikey": API_KEY
+    }
+    response = requests.get(url ,headers=headers)
+    if response.status_code == 200:
+        hash_data = response.json()
+        return hash_data
+    else:
+        return f"Failed {response.status_code}"
+    
