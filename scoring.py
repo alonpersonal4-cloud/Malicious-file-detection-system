@@ -91,6 +91,16 @@ def suspicious_strings_score(file_path):
         return 2,explanation
 def hash_score(file_path):
     score = 0 #0.5
+    file_hash = functions.calculate_hash(file_path)
+    total_virus_hash = functions.get_hash_info(file_path)
+    if total_virus_hash and 'data' in total_virus_hash:
+        attributes = total_virus_hash['data']['attributes']
+        detections = attributes['last_analysis_stats']['malicious']
+        if detections > 0:
+            return 0.5 , "Hash found"
+        else:
+            return 0,"Hash not found"
+    
     explanation = ["The hash score function is under construction."]
     return score , explanation
 model = pickle.load(open("malware_model.pkl", 'rb'))

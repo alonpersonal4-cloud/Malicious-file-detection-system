@@ -1,5 +1,5 @@
 import functions
-from scoring import calculate_malware_score 
+from scoring import calculate_malware_score
 #testing the check_file_size function
 test_file_size = functions.check_file_size("C:/Users/user/Downloads/GitHubDesktopSetup-x64.exe")
 print(test_file_size)
@@ -23,4 +23,8 @@ score_one = calculate_malware_score("C:/Users/user/Downloads/test.txt")
 score_two = calculate_malware_score("C:/Users/user/Downloads/GitHubDesktopSetup-x64.exe")
 print(score_one)
 print(score_two)
-        
+#testing the api with the EICAR a fake virus 
+EICAR_hash = "3395856ce81f2b7382dee72602f798b642f14140be043003f0b2405617d120a6"
+total_virus_hash_info = functions.get_hash_info(EICAR_hash)
+if total_virus_hash_info:
+    print(total_virus_hash_info)
