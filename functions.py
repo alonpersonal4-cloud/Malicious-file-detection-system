@@ -86,6 +86,7 @@ def calculate_entropy(file_path):
 # function for the ML model
 def get_size_of_code(file_path):
     path =Path(file_path)
+    pe = None
     try:
         pe = pefile.PE(path)
         size_of_code = pe.OPTIONAL_HEADER.SizeOfCode
@@ -97,6 +98,7 @@ def get_size_of_code(file_path):
             pe.close()
 def get_size_of_image(file_path):
     path =Path(file_path)
+    pe = None
     try:
         pe = pefile.PE(path)
         size_of_image = pe.OPTIONAL_HEADER.SizeOfImage
@@ -108,6 +110,7 @@ def get_size_of_image(file_path):
             pe.close()
 def get_number_of_sections(file_path):
     path =Path(file_path)
+    pe = None
     try:
         pe = pefile.PE(path)
         sections = pe.FILE_HEADER.NumberOfSections
@@ -118,20 +121,19 @@ def get_number_of_sections(file_path):
         if pe:
             pe.close()
 def check_packer(file_path):
+    pe = None
     try:
-        path =Path(file_path)
+        path = Path(file_path)
         string_list = ["upx", "aspack", "pecompact", "packed"]
         pe = pefile.PE(path)
-        sections = pe.sections
-        for section in sections:
+        for section in pe.sections:
             section_name = section.Name.decode('utf-8', errors='ignore').lower().strip()
-            if (section_name in string_list):
+            if section_name in string_list:
+                pe.close()
                 return 1
+        pe.close()
         return 0
-    except:
+    except :
         return 0
-    finally:
-        if pe:
-            pe.close()
 
     
