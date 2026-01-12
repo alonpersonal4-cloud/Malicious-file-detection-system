@@ -51,10 +51,10 @@ def entropy_score(file_path):
         score +=1
         explanation.append("Mid entropy level (high level language)")
     elif file_entropy <7.5:
-        score+=2
+        score+=2.25
         explanation.append("High entropy level (ASCII character)")
     else:
-        score+=2.25
+        score+=2.75
         explanation.append("Very high level of entropy (fully random)")
     return score , explanation
 def suspicious_strings_score(file_path):
@@ -89,20 +89,6 @@ def suspicious_strings_score(file_path):
         return 1.5, explanation
     else :
         return 2,explanation
-def hash_score(file_path):
-    score = 0 #0.5
-    file_hash = functions.calculate_hash(file_path)
-    total_virus_hash = functions.get_hash_info(file_path)
-    if total_virus_hash and 'data' in total_virus_hash:
-        attributes = total_virus_hash['data']['attributes']
-        detections = attributes['last_analysis_stats']['malicious']
-        if detections > 0:
-            return 0.5 , "Hash found"
-        else:
-            return 0,"Hash not found"
-    
-    explanation = ["The hash score function is under construction."]
-    return score , explanation
 model = pickle.load(open("malware_model.pkl", 'rb'))
 def model_score(file_path):
     path = Path(file_path)
@@ -138,9 +124,6 @@ def calculate_malware_score(file_path):
     sus_words = suspicious_strings_score(file_path)#
     score = sus_words[0] + score
     explanation.extend(sus_words[1])
-    hash_file = hash_score(file_path)#
-    score = hash_file[0] + score
-    explanation.extend(hash_file[1])
     ML_prediction = model_score(file_path)#
     score = ML_prediction[0] + score
     explanation.extend(ML_prediction[1])

@@ -133,19 +133,5 @@ def check_packer(file_path):
     finally:
         if pe:
             pe.close()
-load_dotenv()
-API_KEY = os.getenv('VT_API_KEY')
-def get_hash_info(file_path):
-    base_url = "https://www.virustotal.com/api/v3/files"
-    url = f"{base_url}/{calculate_hash(file_path)}"
-    headers = {
-        "accept": "application/json",
-        "x-apikey": API_KEY
-    }
-    response = requests.get(url ,headers=headers)
-    if response.status_code == 200:
-        hash_data = response.json()
-        return hash_data
-    else:
-        return f"Failed {response.status_code}"
+
     
