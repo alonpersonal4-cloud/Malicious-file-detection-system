@@ -22,4 +22,4 @@ print(test_calculate_entropy1 , test_calculate_entropy2)
 #score_one = calculate_malware_score("C:/Users/user/Downloads/test.txt")
 score_two = calculate_malware_score("C:/Users/user/Downloads/GitHubDesktopSetup-x64.exe")
 #print(score_one)
-print(score_two)
+print(score_two)#
