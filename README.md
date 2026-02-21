@@ -6,3 +6,5 @@
 # The files that are being examined in this project are on my computer. if you want to gain access to them please contact me.
 
 # please run the file "train_model.py" so the ML model will work on your project!
+
+# In the file train_model.py change line 9 to your Path(C:\user...)

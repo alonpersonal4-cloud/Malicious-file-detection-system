@@ -6,7 +6,7 @@ import pickle
 import numpy
 import os
 
-df = pd.read_csv(r'C:\Users\user\Documents\Projects\Malicious-file-detection-system\data\dataset.csv')
+df = pd.read_csv(r'C:\Users\user\Documents\Projects\Malicious-file-detection-system\data\dataset.csv')#change
 print(df.head())
 features = ['E_file','filesize','sus_sections','packer','SizeOfCode','SizeOfImage','NumberOfSections']
 for feature in (features):
